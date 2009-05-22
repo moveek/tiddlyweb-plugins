@@ -1,0 +1,51 @@
+Experimental plugin extending the filter syntax with a select attribute 
+tentively called 'in'. 
+
+The plugin was created with on-demand loading in mind. As
+the normal behavior of a TiddlyWiki is to initially load all tiddlers 
+listed in the tiddler DefaulTiddlers, an example usage might be:
+
+	select=in:DefaultTiddlers
+
+This selects all tiddlers referenced in DefaultTiddlers as well as
+DefaultTiddlers itself.
+ 
+Note: The tiddler name passed in the query (in this case DefaultTiddlers)
+is later referred to as the 'condition tiddler' or 'parent tiddler'.
+
+This plugin deviates a bit from normal filter behavior. Instead
+of taking an attribute related to a tiddler's meta data (such as
+title, tag, etc.), this filter actually takes a tiddler name as 
+a condition, retrieves that tiddler from the store, and filters all 
+other tiddlers based on the contents of the retrieved condition tiddler.
+
+In other words this is not a meta data based filter... 
+
+so it's not a perfect logical fit as an extension of the 
+select filter syntax; but for now it has been implemented as one. 
+One benefit of doing it this way is that it can be used as
+part of an mselect query.
+
+Issues:
+
+The first task of this plugin is to get the condition (or parent) 
+tiddler from the store so its contents can be parsed for links to other tiddlers.
+
+Getting the parent from the store can be problematic. 
+It needs to be retrieved from a bag. Logically this
+would be whatever bag, or bags, are being filtered. But filters don't
+have direct access to this information so the plugin currently 
+figures it out by looking at the bag field of the tiddlers being filtered.
+
+However, an issue arises in certain cases when this filter is used on a recipe;
+specifically when there are multiple versions of a parent tiddler
+across several bags in the recipe. 
+
+In TiddlyWeb recipes are "uniquified". If the same tiddler
+exists in multiple bags, a recipe uses only the one from the
+last bag listed in the recipe. The correct behavior for this 
+filter would be to choose the same tiddler that is used by the recipe.
+That would require knowing from the start which bags are in the 
+recipe and in what order.
+
+-Oveek

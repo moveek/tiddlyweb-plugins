@@ -1,0 +1,46 @@
+An experimental plugin that enables loading a selected subset
+of tiddlers when a tiddlywiki document is first requested.
+
+This is done by adding an mselect query onto an incoming 
+request provided the request is in the form: /recipes/{recipe_name}/tiddlers.wiki.
+
+Requires: the mselect plugin, and optionally the tiddlylinkfilter
+plugin which provides a new select attribute.
+
+A chosen list of tiddlers can be specified in the tiddlywebconfig.py 
+config file as a dictionary of the following format:
+
+    'initial_tiddlers': {
+        'select_attribute1': [List of values],
+        'select_attribute2': [List of values]
+    }
+
+Specific example:
+
+    'initial_tiddlers': {
+        'in': ['DefaultTiddlers'],
+        'tag': ['systemConfig'],
+        'title': ['SiteTitle', 'SiteSubtitle']
+    }
+
+Any attribute that is supported by a select query can be used here, 
+and each attribute can accept a list of any number of values.
+
+As noted the dictionary is turned into an mselect query.
+The above example becomes: 
+
+    mselect=title:SiteTitle,title:SiteSubtitle,tag:systemConfig,in:DefaultTiddlers
+
+Note the custom 'in' attribute provided by the tiddlylinkfilter plugin.
+It selects DefaultTiddlers and every tiddler DefaultTiddlers links to,
+effectively making all of them available upon loading a recipe. 
+
+This is usefull in a dynamic loading situation as the 'in' attribute 
+enables the standard TiddlyWiki start up behavior of opening and displaying 
+all tiddlers listed in DefaulTiddlers. 
+
+The tiddlywebconfig.py file supplied with this plugin contains
+what could be considered a logical default list of tiddlers 
+to load initially in a load-on-demand tiddlyweb setup.
+
+-Oveek
