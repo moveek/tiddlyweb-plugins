@@ -1,4 +1,4 @@
-application: tiddlyweb
+application: omcode
 version: 1
 runtime: python
 api_version: 1
